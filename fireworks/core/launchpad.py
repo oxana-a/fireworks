@@ -282,19 +282,26 @@ class LaunchPad(FWSerializable):
 
     @classmethod
     def from_dict(cls, d):
-        port = d.get("port", None)
-        name = d.get("name", None)
-        username = d.get("username", None)
-        password = d.get("password", None)
-        logdir = d.get("logdir", None)
-        strm_lvl = d.get("strm_lvl", None)
-        user_indices = d.get("user_indices", [])
-        wf_user_indices = d.get("wf_user_indices", [])
-        authsource = d.get("authsource", None)
-        uri_mode = d.get("uri_mode", False)
-        mongoclient_kwargs = d.get("mongoclient_kwargs", None)
+        host = d.pop("host", None)
+        port = d.pop("port", None)
+        name = d.pop("name", None)
+        username = d.pop("username", None)
+        password = d.pop("password", None)
+        logdir = d.pop("logdir", None)
+        strm_lvl = d.pop("strm_lvl", None)
+        user_indices = d.pop("user_indices", [])
+        wf_user_indices = d.pop("wf_user_indices", [])
+        authsource = d.pop("authsource", None)
+        uri_mode = d.pop("uri_mode", False)
+        mongoclient_kwargs = d.pop("mongoclient_kwargs", None)
+        if d!={}:
+            try:
+                mongoclient_kwargs.update(d)
+            except AttributeError:
+                mongoclient_kwargs = d
+
         return LaunchPad(
-            d["host"],
+            host,
             port,
             name,
             username,
